@@ -1,5 +1,5 @@
+import noise
 import numpy
-import opensimplex
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
@@ -297,7 +297,7 @@ def plot(position, viewport_size: tuple, max_depth, triangles: list, axes: Axes3
 
 
 def _construct_triangle(
-    edge_indices: list[int], vertex_indices: numpy.ndarray[int]
+        edge_indices: list[int], vertex_indices: numpy.ndarray[int]
 ) -> list:
     triangle: list = []
 
@@ -316,25 +316,17 @@ def _construct_triangles(vertex_indices, triangulation_index: int) -> list:
     edge_indices: list[int] = TRIANGULATION_TABLE[triangulation_index]
 
     return [
-        _construct_triangle(edge_indices[index : index + 3], vertex_indices)
+        _construct_triangle(edge_indices[index: index + 3], vertex_indices)
         for index in range(0, len(edge_indices), 3)
     ]
 
 
-def _get_voxel_noise(position: numpy.ndarray, noise_scale: float) -> numpy.ndarray:
-    z = (numpy.arange(start=0, stop=2) + position[0]) / noise_scale
-    y = (numpy.arange(start=0, stop=2) + position[1]) / noise_scale
-    x = (numpy.arange(start=0, stop=2) + position[2]) / noise_scale
-
-    return opensimplex.noise3array(x, y, z)
-
-
 def voxel(
-    position: numpy.ndarray, noise_scale: float, surface_level: float = 0.0
+        position: numpy.ndarray, noise_scale: float, surface_level: float = 0.0
 ) -> list | None:
-    noise: numpy.ndarray = _get_voxel_noise(position, noise_scale)
+    noise_values: numpy.ndarray = _get_voxel_noise_simplex(position, noise_scale)
     surface_mask: numpy.ndarray = numpy.less(
-        noise, numpy.full(noise.shape, surface_level)
+        noise_values, numpy.full(noise_values.shape, surface_level)
     )
     vertex_indices: numpy.ndarray = numpy.array(
         [
@@ -349,7 +341,7 @@ def voxel(
         ]
     )
     triangulation_index: int = sum(
-        2**index
+        2 ** index
         for index, (zi, yi, xi) in enumerate(vertex_indices)
         if surface_mask[zi, yi, xi]
     )
@@ -361,3 +353,20 @@ def voxel(
     triangles_in_cube += position
 
     return triangles_in_cube
+
+
+def _get_voxel_noise_simplex(
+        position: numpy.ndarray, noise_scale: float
+) -> numpy.ndarray:
+    noise_values: numpy.ndarray = numpy.zeros(shape=(2, 2, 2))
+
+    for z in numpy.arange(start=0, stop=2):
+        for y in numpy.arange(start=0, stop=2):
+            for x in numpy.arange(start=0, stop=2):
+                noise_values[z, y, x] = noise.snoise3(
+                    x=(x + position[2]) / noise_scale,
+                    y=(y + position[1]) / noise_scale,
+                    z=(z + position[0]) / noise_scale,
+                )
+
+    return noise_values
