@@ -101,11 +101,10 @@ def get_marchingcubes_viewport(
 
                 # triangles.extend(voxel)
 
-                intersection: tuple | None = check_triangle_intersections(voxel, pixel_center)
+                intersection: numpy.ndarray | None = check_triangle_intersections(voxel, pixel_center)
 
                 if intersection is not None:
-                    intersection_position, triangle = intersection
-                    intersection_distance = numpy.linalg.norm(intersection_position - pixel_center)
+                    intersection_distance = numpy.linalg.norm(intersection - pixel_center)
                     viewport[zi, xi] = intersection_distance / max_depth
                     break
 
@@ -125,10 +124,7 @@ def get_marchingcubes_viewport(
     return viewport
 
 
-def check_triangle_intersections(
-    voxel: list,
-    pixel_center: numpy.ndarray,
-) -> tuple[numpy.ndarray, list] | None:
+def check_triangle_intersections(voxel: list, pixel_center: numpy.ndarray) -> numpy.ndarray | None:
     for triangle in voxel:
         intersection: numpy.ndarray | None = ray_intersects_triangle(
             ray_origin=pixel_center,
@@ -139,6 +135,6 @@ def check_triangle_intersections(
         if intersection is None:
             continue
 
-        return intersection, triangle
+        return intersection
 
     return None
