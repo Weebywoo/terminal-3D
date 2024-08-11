@@ -9,6 +9,6 @@
 - Speed up ray casting (BVH, etc.)
 - Multiprocessing:
   - Tried, but didn't yield speedups
-- Organise code into pipeline style (researcg what that actually means)
+- Organise code into pipeline style (research what that actually means)
 - Add mouse controls
 - Improve controls
