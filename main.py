@@ -3,7 +3,8 @@ import time
 
 import numpy
 
-from src.viewport import get_marchingcubes_viewport, print_viewport, print_frame
+from src.console import print_viewport, print_frame
+from src.viewport import get_marchingcubes_viewport
 
 
 def main():
@@ -13,16 +14,14 @@ def main():
 
     position: numpy.ndarray = numpy.array([0, 0, 0], dtype=int)
     size: tuple[int, int] = (height - 2, (width - 4) // 2)
-    max_depth: float = 35.0
     voxel_storage: dict[tuple, list] = {}
     frame_times: list[float] = []
 
     print_frame(height, width)
 
-    for y in range(20):
+    for y in range(500):
         start_time: float = time.time()
-        viewport: numpy.ndarray = get_marchingcubes_viewport(position, size, max_depth, voxel_storage)
-
+        viewport: numpy.ndarray = get_marchingcubes_viewport(position, size, voxel_storage)
         print_viewport(viewport)
 
         position[1] = y  # handle_controls()
@@ -38,8 +37,8 @@ def main():
         avg_frame_time: float = (sum(frame_times) / len(frame_times)) * 1000
         fps: float = round(1 / (avg_frame_time / 1000), 2)
 
-        frame_time_formated: str = str(int(avg_frame_time)).rjust(5)
-        fps_formated: str = str(fps).rjust(4)
+        frame_time_formated: str = str(int(avg_frame_time)).rjust(4)
+        fps_formated: str = str(fps).rjust(5)
 
         print(cursor_position, frame_time_formated + "ms", fps_formated + "fps", end="")
 
