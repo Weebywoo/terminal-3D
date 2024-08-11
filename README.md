@@ -7,7 +7,8 @@
 - Implement perspective camera
 - Implement proper ray casting
 - Speed up ray casting (BVH, etc.)
-- Multithreading?
+- Multiprocessing:
+  - Tried, but didn't yield speedups
 - Organise code into pipeline style (researcg what that actually means)
 - Add mouse controls
 - Improve controls
