@@ -42,7 +42,7 @@ def ray_intersects_triangle(
 
 def get_marchingcubes_viewport(
     position: numpy.ndarray,
-    viewport_size: tuple,
+    viewport_size: tuple[int, int],
     voxel_storage: dict[tuple, list],
 ) -> numpy.ndarray:
     # figure: Figure = plt.figure()
