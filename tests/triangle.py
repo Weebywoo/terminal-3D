@@ -2,7 +2,7 @@ import unittest
 
 import numpy
 
-from src.core import Triangle
+from src.triangle import Triangle
 
 
 class TriangleTest(unittest.TestCase):
