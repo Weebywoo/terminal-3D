@@ -1,4 +1,0 @@
-SURFACE_LEVEL: float = 0.0
-NOISE_SCALE: float = 25.0
-VIEWPORT_DISTANCE: float = 5.0
-MAX_DEPTH: float = 35.0

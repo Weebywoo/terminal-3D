@@ -1,49 +1,48 @@
-import shutil
-import time
-
 import numpy
 
-from src.console import add_ui, print_frame, add_render
-from src.viewport import get_marchingcubes_viewport
+from src.mesh import Mesh
+from src.screen import Screen
+from src.timer import Timer
+
+
+@Timer
+def render(screen: Screen, meshes: list[Mesh], stats: dict):
+    screen.clear()
+
+    for mesh in meshes:
+        for vertex in mesh.vertices:
+            screen.draw_vertex(vertex)
+
+        screen.draw_quad(mesh.vertices[:4])
+        screen.draw_quad(mesh.vertices[4:])
+        screen.draw_line(mesh.vertices[0], mesh.vertices[4])
+        screen.draw_line(mesh.vertices[2], mesh.vertices[6])
+        screen.draw_line(mesh.vertices[3], mesh.vertices[7])
+        screen.draw_line(mesh.vertices[5], mesh.vertices[1])
+
+    screen.add_ui(stats)
+    screen.print_frame()
 
 
 def main():
-    terminal_size = shutil.get_terminal_size()
-    height, width = terminal_size.lines, terminal_size.columns
+    screen: Screen = Screen()
+    cube: Mesh = Mesh(
+        vertices=[
+            numpy.array([1, -1, -5]),
+            numpy.array([1, -1, -3]),
+            numpy.array([1, 1, -5]),
+            numpy.array([1, 1, -3]),
+            numpy.array([-1, -1, -5]),
+            numpy.array([-1, -1, -3]),
+            numpy.array([-1, 1, -5]),
+            numpy.array([-1, 1, -3]),
+        ],
+        vertex_order=[0, 1, 2, 1, 3, 2, 2, 3, 6, 3, 7, 6],
+    )
 
-    position: numpy.ndarray = numpy.array([0, 0, 0], dtype=int)
-    voxel_storage: dict[tuple, list] = {}
-    frame_times: list[float] = []
-    last_avg_frame_time: int = 0
-    last_avg_fps: int = 0
-
-    frame_buffer: numpy.ndarray = numpy.full(shape=(height, width), dtype=object, fill_value=" ")
-
-    for y in range(500):
-        start_time: float = time.time()
-        viewport: numpy.ndarray = get_marchingcubes_viewport(position, (height, width // 2), voxel_storage)
-        stats: dict[str, tuple[int, str]] = {
-            "FPS": (int(round(last_avg_fps)), "fps"),
-            "Frame time": (int(round(last_avg_frame_time)), "ms"),
-        }
-
-        add_render(frame_buffer, viewport)
-        add_ui(frame_buffer, height, width, stats)
-        print_frame(frame_buffer)
-
-        position[1] = y
-
-        end_time: float = time.time()
-
-        if len(frame_times) >= 5:
-            frame_times.pop(0)
-
-        frame_times.append(end_time - start_time)
-
-        last_avg_frame_time: float = (sum(frame_times) / len(frame_times)) * 1000
-        last_avg_fps: float = 1 / (last_avg_frame_time / 1000)
-
-    # plt.show()
+    while True:
+        render(screen, meshes=[cube])
+        cube.rotate((0.0, 0.0005, 0.0))
 
 
 if __name__ == "__main__":
