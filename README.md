@@ -15,7 +15,8 @@ Clock-wise vertex definition
 - [x] Implement perspective camera
 - [x] Implement rasterization for performance gains
 - [x] Implement line drawing
-- [x] Implement triangle drawing
-- [ ] Organise code into pipeline style (research what that actually means)
-- [ ] Add mouse controls
-- [ ] controls
+- [x] Implement triangle line drawing
+- [ ] FEATURE: Add keyboard and mouse controls
+- [ ] FEATURE: Add view frustum culling of meshes
+- [ ] BUG: When moving the camera into and past the cube it reappears and seems to distance itself as if the camera was moving backwards away from it
+- [ ] FEATURE: Add full triangle drawing 
