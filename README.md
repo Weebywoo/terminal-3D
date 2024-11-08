@@ -9,13 +9,3 @@
 - https://www.youtube.com/@SebastianLague/videos (Specifically: https://www.youtube.com/watch?v=M3iI2l0ltbE)
 
 Clock-wise vertex definition
-
-## ToDo
-
-- [x] Implement perspective camera
-- [x] Implement rasterization for performance gains
-- [x] Implement line drawing
-- [x] Implement triangle drawing
-- [ ] Organise code into pipeline style (research what that actually means)
-- [ ] "Camera" controls
-- [x] Constant fps
