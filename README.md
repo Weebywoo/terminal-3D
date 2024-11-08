@@ -17,5 +17,5 @@ Clock-wise vertex definition
 - [x] Implement line drawing
 - [x] Implement triangle drawing
 - [ ] Organise code into pipeline style (research what that actually means)
-- [ ] Add mouse controls
-- [ ] controls
+- [ ] "Camera" controls
+- [x] Constant fps
