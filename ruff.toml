@@ -3,7 +3,7 @@ exclude = [
     ".idea",
     ".ruff_cache"
 ]
-line-length = 120
+line-length = 121
 indent-width = 4
 target-version = "py312"
 
